@@ -1,0 +1,71 @@
+---
+import type { Product } from '../data/products';
+import { formatPrice, categories } from '../data/products';
+import ProductThumb from './ProductThumb.astro';
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const cat = categories.find((c) => c.id === product.category)!;
+---
+
+<article
+  class="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-soft transition-all duration-400 hover:-translate-y-1.5 hover:border-primary/25 hover:shadow-lift"
+>
+  <div class="relative aspect-[4/3] overflow-hidden">
+    <ProductThumb
+      hue={product.hue}
+      category={product.category}
+      class="h-full w-full transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+    />
+    {product.featured && (
+      <span class="absolute left-3.5 top-3.5 inline-flex items-center gap-1 rounded-full bg-primary/95 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-primary-foreground shadow-md backdrop-blur-sm">
+        Destacado
+      </span>
+    )}
+    <span class="absolute right-3.5 top-3.5 rounded-full bg-background/85 px-3 py-1 text-[11px] font-medium text-foreground shadow-sm backdrop-blur-md">
+      {cat.label}
+    </span>
+  </div>
+
+  <div class="flex flex-1 flex-col p-5">
+    <div class="flex items-start justify-between gap-3">
+      <h3 class="font-display text-lg font-semibold leading-tight text-foreground">{product.name}</h3>
+    </div>
+    <p class="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{product.description}</p>
+
+    <dl class="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg bg-muted/50 p-3 text-xs">
+      <div>
+        <dt class="text-muted-foreground">Material</dt>
+        <dd class="font-medium text-foreground">{product.material}</dd>
+      </div>
+      <div>
+        <dt class="text-muted-foreground">Acabado</dt>
+        <dd class="font-medium text-foreground">{product.finish}</dd>
+      </div>
+      <div>
+        <dt class="text-muted-foreground">Medidas</dt>
+        <dd class="font-medium text-foreground">{product.dimensions}</dd>
+      </div>
+      <div>
+        <dt class="text-muted-foreground">Plazo</dt>
+        <dd class="font-medium text-foreground">{product.leadTime}</dd>
+      </div>
+    </dl>
+
+    <div class="mt-5 flex items-center justify-between border-t border-border pt-4">
+      <div>
+        <span class="block text-[11px] uppercase tracking-wide text-muted-foreground">Desde</span>
+        <span class="font-display text-xl font-semibold text-primary">{formatPrice(product)}</span>
+      </div>
+      <a
+        href="#contacto"
+        class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90 hover:shadow-lift active:scale-95"
+      >
+        Consultar
+      </a>
+    </div>
+  </div>
+</article>
